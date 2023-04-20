@@ -1,13 +1,34 @@
-const Hapi = require("@hapi/hapi");
+const express = require("express");
 
-const init = async () => {
-    const server = Hapi.server({
-        port: 5000,
-        host: "localhost",
+const app = express();
+
+// Return setiap request menjadi JSON
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+const db = require("./src/app/models");
+
+db.mongoose
+    .connect(db.url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => {
+        console.log(`Database connected!`);
+    })
+    .catch((err) => {
+        console.log(`Cannote connect to the database!`, err);
+        process.exit();
     });
 
-    await server.start();
-    console.log(`Server berjalan pada ${server.info.uri}`);
-};
+// Route Home
+app.get("/", (req, res) => {
+    res.json({
+        message: "Halo",
+    });
+});
 
-init();
+const PORT = 3100;
+app.listen(PORT, () => {
+    console.log(`Server is running on ${PORT}`);
+});
