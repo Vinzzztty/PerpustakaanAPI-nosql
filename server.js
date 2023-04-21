@@ -28,7 +28,9 @@ app.get("/", (req, res) => {
     });
 });
 
+require("./src/app/routes/postRoute")(app);
+
 const PORT = 3100;
 app.listen(PORT, () => {
-    console.log(`Server is running on ${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
