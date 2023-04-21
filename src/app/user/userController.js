@@ -36,3 +36,70 @@ exports.create = (req, res) => {
             });
         });
 };
+
+// GET by ID
+exports.findOne = (req, res) => {
+    const id = req.params.id;
+
+    Post.findById(id)
+        .then((result) => {
+            res.status(200).send({
+                status: "success",
+                message: result,
+            });
+        })
+        .catch((err) => {
+            res.status(404).send({
+                status: "fail",
+                message: err.message || "ID tidak ditemukan",
+            });
+        });
+};
+
+exports.update = (req, res) => {
+    const id = req.params.id;
+
+    Post.findByIdAndUpdate(id, req.body)
+        .then((result) => {
+            if (!result) {
+                res.status(404).send({
+                    status: "fail",
+                    message: "Post tidak ditemukan",
+                });
+            }
+            res.status(200).send({
+                status: "success",
+                message: "Post was updated",
+            });
+        })
+        .catch((err) => {
+            res.status(404).send({
+                status: "fail",
+                message: err.message || "Id tidak diteumkan",
+            });
+        });
+};
+
+exports.delete = (req, res) => {
+    const id = req.params.id;
+
+    Post.findByIdAndRemove(id)
+        .then((result) => {
+            if (!result) {
+                res.status(404).send({
+                    status: "fail",
+                    message: "Post not found",
+                });
+            }
+            res.send({
+                status: "success",
+                message: "Post was deleted",
+            });
+        })
+        .catch((err) => {
+            res.status(409).send({
+                status: "fail",
+                message: err.message || "Some error while delete post",
+            });
+        });
+};
